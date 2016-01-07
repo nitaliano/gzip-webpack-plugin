@@ -41,7 +41,6 @@ GzipPlugin.prototype.onOptimize = function (assets, cb) {
                 return cb(err);
             }
 
-            console.log('here');
             var fileParts = file.split('.');
             var ext = fileParts.pop();
             assets[fileParts.join('.') + '.gz.' + ext] = new RawSource(result);
