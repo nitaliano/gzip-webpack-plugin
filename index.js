@@ -2,22 +2,22 @@ var zlib = require('zlib');
 var async = require('async');
 var RawSource = require('webpack/lib/RawSource');
 
-function WebpackGzipPlugin(options) {
+function GzipPlugin(options) {
     if (!options) {
         options = {};
     }
     this.regExp = options.regExp || /\.js$|\.css$/;
 }
 
-WebpackGzipPlugin.prototype.apply = function (compiler) {
+GzipPlugin.prototype.apply = function (compiler) {
     compiler.plugin('this-compilation', this.onCompilation.bind(this));
 };
 
-WebpackGzipPlugin.prototype.onCompilation = function (compilation) {
+GzipPlugin.prototype.onCompilation = function (compilation) {
     compilation.plugin("optimize-assets", this.onOptimize.bind(this));
 };
 
-WebpackGzipPlugin.prototype.onOptimize = function (assets, cb) {
+GzipPlugin.prototype.onOptimize = function (assets, cb) {
     var self = this;
 
     async.forEach(Object.keys(assets), function(file, cb) {
@@ -41,11 +41,14 @@ WebpackGzipPlugin.prototype.onOptimize = function (assets, cb) {
                 return cb(err);
             }
 
-            var newFile = this.asset.replace(/\{file\}/g, file);
-            assets[newFile] = new RawSource(result);
-            callback();
+            console.log('here');
+            var fileParts = file.split('.');
+            var ext = fileParts.pop();
+            assets[fileParts.join('.') + '.gz.' + ext] = new RawSource(result);
+
+            return cb();
         });
-    }, callback);
+    }, cb);
 };
 
-module.exports = WebpackGzipPlugin;
+module.exports = GzipPlugin;
