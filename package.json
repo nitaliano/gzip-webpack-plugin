@@ -1,0 +1,10 @@
+{
+  "name": "webpack-gzip-plugin",
+  "version": "0.0.1",
+  "author": "Nick Italiano",
+  "description": "Gzips css, and js files",
+  "dependencies": {
+    "async": "^1.5.1",
+    "webpack": "^1.12.10"
+  }
+}
